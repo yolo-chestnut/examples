@@ -1,0 +1,5 @@
+netty-server:
+  conf:
+    port: 6543              # netty server 默认监听6666端口（可以在NettyServerConf中进行配置更改）
+    boss-threads: 1         # 若不设置，默认值为0，netty server启动线程数量为max(1, SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2))
+    worker-threads: 10      # 同boss-threads
