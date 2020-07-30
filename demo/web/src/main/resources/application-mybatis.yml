@@ -1,0 +1,81 @@
+# mybatis 官方核心配置（基本是默认值，不怎么改动）
+mybatis:
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    auto-mapping-behavior: partial
+    auto-mapping-unknown-column-behavior: warning
+    default-executor-type: simple
+    default-statement-timeout: 25
+    local-cache-scope: session
+    jdbc-type-for-null: other
+    lazy-load-trigger-methods: equals,clone,hashCode,toString
+
+## 全部核心配置及说明
+#mybatis:
+#  configuration:
+#    # 全局性地开启或关闭所有映射器配置文件中已配置的任何缓存。默认值true
+#    cache-enabled: true
+#    # 延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。特定关联关系中可通过设置fetchType属性来覆盖该项的开关状态。默认值false
+#    lazy-loading-enabled: false
+#    # 开启时，任一方法的调用都会加载该对象的所有延迟加载属性。否则，每个延迟加载属性会按需加载（参考lazy-load-trigger-methods）。默认值false（3.4.1及之前的版本中默认为true）
+#    aggressive-lazy-loading: false
+#    # 是否允许单个语句返回多结果集（需要数据库驱动支持）。默认值true
+#    multiple-result-sets-enabled: true
+#    # 使用列标签代替列名。实际表现依赖于数据驱动，具体可参考数据库驱动的相关文档，或通过对比测试来观察。默认值为true
+#    use-column-label: true
+#    # 允许JDBC支持自动生成主键，需要数据库驱动支持。如果设置为true，将强制使用自动生成主键。尽管一些数据库驱动不支持此特性，但仍可正常工作（如Derby）。默认值false
+#    use-generated-keys: false
+#    # 指定MyBatis应如何自动映射列到字段或属性。NONE表示会关闭自动映射；PARTIAL只会自动映射没有定义嵌套结果映射的字段。FULL会自动映射任何复杂的结果集（无论是否嵌套）。默认值PARTIAL
+#    auto-mapping-behavior: partial
+#    # 指定发现自动映射目标未知列（或未知属性类型）的行为。NONE：不做任何反应 WARNING：输出警告日志 FAILING：映射失败。默认值NONE
+#    auto-mapping-unknown-column-behavior: none
+#    # 配置默认的执行器。SIMPLE就是普通的执行器；REUSE执行器重用预处理语句（PreparedStatement）；BATCH执行器不仅重用语句还会执行批量更新。默认值SIMPLE
+#    default-executor-type: simple
+#    # 设置超时时间，它决定数据库驱动等待数据响应的秒数。默认值未设置（null）
+#    default-statement-timeout:
+#    # 为驱动的结果集获取数量（fetchSize）设置一个建议值。此参数只可以在查询设置中被覆盖。默认值未设置（null）
+#    default-fetch-size:
+#    # 指定语句默认的滚动策略。（新增于3.5.2）FORWARD_ONLY | SCROLL_SENSITIVE | SCROLL_INSENSITIVE | DEFAULT（等同于未设置）。默认值default
+#    default-result-set-type: default
+#    # 是否允许在嵌套语句中使用分页（RowBounds）。如果允许使用则设置为false。默认值false
+#    safe-row-bounds-enabled: false
+#    # 是否允许在嵌套语句中使用结果处理器（ResultHandler）。如果允许使用则设置为false。默认值false
+#    safe-result-handler-enabled: true
+#    # 是否开启驼峰命名自动映射，即从经典数据库列名A_COLUMN映射到经典Java属性aColumn。默认值false
+#    map-underscore-to-camel-case: false
+#    # MyBatis利用本地缓存机制（Local Cache）防止循环引用和加速重复的嵌套查询。默认值为SESSION，会缓存一个会话中执行的所有查询。若设置值为STATEMENT，本地缓存将仅用于执行语句，对相同SqlSession的不通查询将不会进行缓存。
+#    # 默认值SESSION
+#    local-cache-scope: session
+#    # 当没有为参数指定特定的JDBC类型时，空值的默认JDBC类型。某些数据库驱动需要指定列的JDBC类型，多数情况下直接用一般类型即可，比如NULL、VARCHAR或OTHER。默认值OTHER
+#    jdbc-type-for-null: other
+#    # 指定对象的哪些方法触发一次延迟加载。默认值equals,clone,hashCode,toString
+#    lazy-load-trigger-methods: equals,clone,hashCode,toString
+#    # 指定动态SQL生成使用的默认脚本语言。默认值org.apache.ibatis.scripting.xmltags.XMLLanguageDriver
+#    # 弃用，请使用default-scripting-language-driver
+#    # default-scripting-language: org.apache.ibatis.scripting.xmltags.XMLLanguageDriver
+#
+#    # 指定Enum使用的默认TypeHandle。（新增于3.4.5）org.apache.ibatis.type.EnumTypeHandler
+#    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+#    # 指定当结果集中值为null的时候是否调用映射对象的setter（map对象时为put）方法，这在依赖于Map.keySet()或null值进行初始化时比较有用。注意基本类型（int、boolean等）是不能设置成null的。
+#    # 默认值 false
+#    call-setters-on-nulls: false
+#    # 当返回行的所有列都是空时，MyBatis默认返回null。当开启这个设置时，Mybatis会返回一个空实例。请注意，它也适用于嵌套的结果集（如集合或关联）。（新增于3.4.2）。默认值false
+#    return-instance-for-empty-row: false
+#    # 指定MyBatis增加到日志名称的前缀。默认值未设置
+#    log-prefix:
+#    # 指定MyBatis所用日志的具体实现，未指定时将自动查找。默认值未设置
+#    log-impl:
+#    # 指定NyBatis创建可延迟加载对象所用到的代理工具。默认值JAVASSIST
+#    proxy-factory:
+#    # 指定VFS的实现。默认值未设置
+#    vfs-impl:
+#    # 允许使用方法签名中的名称作为语句参数名称。为了使用该特性，你项目必须采用Java 8编译，并且加上 -parameters选项。（新增于3.4.1）默认值true
+#    use-actual-param-name: true
+#    # 指定一个提供Configuration实例的类。这个被返回的Configuration实例用来加载被反序列化对象的延迟加载属性值。这个类必须包含一个签名为static Configuration getConfiguration()的方法。（新增于3.2.3）
+#    # 默认值未设置
+#    configuration-factory:
+#  default-scripting-language-driver: org.apache.ibatis.scripting.xmltags.XMLLanguageDriver

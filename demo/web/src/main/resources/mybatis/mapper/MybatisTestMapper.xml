@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="priv.example.web.dao.MybatisTestDao">
+    <!--打开File-Settings-Editor-Language Injections-xml:iBatis3:sql|select|insert|update|delete 去掉sql|-->
+    <!--UserDO/mb_user-->
+    <sql id="userColumns">${alias}.id as user_id, name as user_name, org_id</sql>
+    <!--OrgDO/mb_org-->
+    <sql id="orgColumns">${alias}.id as org_id, org_name</sql>
+    <!--OrgUsers 嵌套查询-->
+    <resultMap id="orgUsers" type="priv.example.web.domain.dataobject.OrgUsersDO">
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <collection property="users" ofType="priv.example.web.domain.dataobject.UserDO" column="org_id">
+            <id property="userId" column="user_id"/>
+            <result property="userName" column="user_name"/>
+            <result property="orgId" column="org_id"/>
+        </collection>
+    </resultMap>
+    <!--OrgUsers 分步查询-->
+    <resultMap id="orgUsersAnother" type="priv.example.web.domain.dataobject.OrgUsersDO">
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <collection property="users" column="org_id"
+                    ofType="priv.example.web.domain.dataobject.UserDO"
+                    select="findUserByOrgId" fetchType="eager">
+        </collection>
+    </resultMap>
+
+    <select id="findUserByUserId" resultType="priv.example.web.domain.dataobject.UserDO">
+        select
+        <include refid="userColumns">
+            <property name="alias" value="mu"/>
+        </include>
+        from mb_user mu
+        where mu.id = #{userId}
+    </select>
+
+    <select id="findUserByOrgId" resultType="priv.example.web.domain.dataobject.UserDO">
+        select
+        <include refid="userColumns">
+            <property name="alias" value="mu"/>
+        </include>
+        from mb_user mu
+        where mu.org_id = #{orgId}
+    </select>
+
+    <select id="findOrgByOrgId" resultType="priv.example.web.domain.dataobject.OrgDO">
+        select
+        <include refid="orgColumns">
+            <property name="alias" value="mo"/>
+        </include>
+        from mb_org mo
+        where mo.id = #{orgId}
+    </select>
+
+    <select id="findOrgUsersByOrgId" resultMap="orgUsers">
+        select
+        <include refid="orgColumns">
+            <property name="alias" value="mo"/>
+        </include>
+        ,
+        <include refid="userColumns">
+            <property name="alias" value="mu"/>
+        </include>
+        from mb_org mo left join mb_user mu on mo.id = mu.org_id
+        where mo.id = #{orgId}
+    </select>
+
+    <select id="findOrgUsersByOrgIdAnother" resultMap="orgUsersAnother">
+        select
+        <include refid="orgColumns">
+            <property name="alias" value="mo"/>
+        </include>
+        from mb_org mo
+        where mo.id = #{orgId}
+    </select>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into mb_user (name, org_id)
+        values (#{userName,jdbcType=VARCHAR}, #{orgId,jdbcType=BIGINT})
+    </insert>
+
+    <insert id="addUserBatch" useGeneratedKeys="true" keyProperty="userId">
+        insert into mb_user (name, org_id) values
+        <foreach collection="userList" item="item" separator=",">
+            (#{item.userName,jdbcType=VARCHAR}, #{item.orgId,jdbcType=BIGINT})
+        </foreach>
+    </insert>
+
+</mapper>
