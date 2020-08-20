@@ -6,7 +6,7 @@
 
     <groupId>priv.example</groupId>
     <artifactId>web</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <parent>
         <groupId>priv.yolo.chestnut</groupId>
         <artifactId>demo</artifactId>
@@ -17,15 +17,19 @@
     <description>web相关集成</description>
 
     <properties>
-        <!--编译时的编码-->
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <!--文件拷贝时的编码-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <maven.compiler.ecoding>UTF-8</maven.compiler.ecoding>
+
+        <dockerfile-maven-version>1.4.9</dockerfile-maven-version>
+        <docker.registry>127.0.0.1:5000</docker.registry>
     </properties>
 
     <dependencies>
+        <!--添加aop-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-aop</artifactId>-->
+<!--        </dependency>-->
         <!--为restTemplate提供底层实现-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -88,6 +92,30 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--该插件，可以将项目打包成docker镜像，并发布到私有镜像仓库-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-version}</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>${docker.registry}/${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <!--默认当前路径为Dockerfile所在路径-->
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

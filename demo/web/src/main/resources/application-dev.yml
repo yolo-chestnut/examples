@@ -6,7 +6,9 @@ spring:
     include: mybatis
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/temp_test
+#    url: jdbc:mysql://localhost:3306/temp_test
+    # docker容器内代指宿主机域名为host.docker.internal
+    url: jdbc:mysql://host.docker.internal:3306/temp_test
     username: root
     password: mysql
 
@@ -18,3 +20,8 @@ mybatis:
     # dev环境，sql语句输出到控制台；pro环境，sql语句不打印
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mybatis/mapper/**/*.xml
+
+#logging:
+#  level:
+#    root: info
+#    priv.example.web.aspect.HttpLog: debug
