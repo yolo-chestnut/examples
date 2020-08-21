@@ -19,6 +19,7 @@
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.ecoding>UTF-8</maven.compiler.ecoding>
+        <maven.test.skip>true</maven.test.skip>
 
         <dockerfile-maven-version>1.4.9</dockerfile-maven-version>
         <docker.registry>127.0.0.1:5000</docker.registry>
@@ -88,10 +89,38 @@
     </dependencies>
 
     <build>
+        <resources>
+            <!--排除src/main/resources目录下所有以.yml结尾的文件（即配置文件）-->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.yml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>web-docker-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptors>src/main/resources/assembly.xml</descriptors>
+                </configuration>
             </plugin>
 
             <!--该插件，可以将项目打包成docker镜像，并发布到私有镜像仓库-->
@@ -113,7 +142,8 @@
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <!--默认当前路径为Dockerfile所在路径-->
-                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+<!--                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>-->
+                        <JAR_FILE>target/web-0.0.1-assembly.tar.gz</JAR_FILE>
                     </buildArgs>
                 </configuration>
             </plugin>
